@@ -77,7 +77,7 @@ EOF;
      */
     public function updateHelper($type, $ownerId, $userId, $alias)
     {
-        if ($type == 'webiste') {
+        if ($type == 'website') {
             $sql = <<<EOF
             UPDATE user_sites SET helper_alias = :helper_alias
             WHERE site_id = :site_id AND user_id = :user_id
