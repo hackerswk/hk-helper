@@ -40,22 +40,22 @@ class Helper
         if ($type == 'website') {
             $sql = <<<EOF
             SELECT * FROM user_sites
-            WHERE user_id = :user_id
+            WHERE site_id = :site_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
-                ':user_id' => $ownerId,
+                ':site_id' => $ownerId,
             ]);
         }
 
         if ($type == 'blackcard') {
             $sql = <<<EOF
             SELECT * FROM crm_helpers
-            WHERE user_id = :user_id
+            WHERE crm_id = :crm_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
-                ':user_id' => $ownerId,
+                ':crm_id' => $ownerId,
             ]);
         }
 
@@ -78,7 +78,7 @@ EOF;
         if ($type == 'website') {
             $sql = <<<EOF
             SELECT site_id, user_id, helper_id, helper_alias FROM user_sites
-            WHERE site_id = :site_id
+            WHERE user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
@@ -89,7 +89,7 @@ EOF;
         if ($type == 'blackcard') {
             $sql = <<<EOF
             SELECT crm_id, user_id, helper_id, helper_alias FROM crm_helpers
-            WHERE crm_id = :crm_id
+            WHERE user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
