@@ -66,6 +66,44 @@ EOF;
         return $result;
     }
 
+/**
+     * Get owners of ministore.
+     *
+     * @param int $userId
+     * @param string $type
+     * @return array
+     */
+    public function getOwners($userId, $type)
+    {
+        if ($type == 'website') {
+            $sql = <<<EOF
+            SELECT site_id, user_id, helper_id, helper_alias FROM user_sites
+            WHERE site_id = :site_id
+EOF;
+            $query = $this->database->prepare($sql);
+            $query->execute([
+                ':user_id' => $userId,
+            ]);
+        }
+
+        if ($type == 'blackcard') {
+            $sql = <<<EOF
+            SELECT crm_id, user_id, helper_id, helper_alias FROM crm_helpers
+            WHERE crm_id = :crm_id
+EOF;
+            $query = $this->database->prepare($sql);
+            $query->execute([
+                ':user_id' => $userId,
+            ]);
+        }
+
+        $result = [];
+        if ($query->rowCount() > 0) {
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return $result;
+    }
+
     /**
      * Update helper alias of user_sites and crm_helpers.
      *
