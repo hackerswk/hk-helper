@@ -110,19 +110,21 @@ EOF;
      * @param string $type
      * @param int $ownerId
      * @param int $userId
+     * @param int $helperId
      * @param string $alias
      * @return bool
      */
-    public function updateHelper($type, $ownerId, $userId, $alias)
+    public function updateHelper($type, $ownerId, $userId, $helperId, $alias)
     {
         if ($type == 'website') {
             $sql = <<<EOF
-            UPDATE user_sites SET helper_alias = :helper_alias
+            UPDATE user_sites SET helper_alias = :helper_alias, helper_id = :helper_id
             WHERE site_id = :site_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
                 ':helper_alias' => $alias,
+                ':helper_id' => $helperId,
                 ':site_id' => $ownerId,
                 ':user_id' => $userId,
             ]);
@@ -130,12 +132,13 @@ EOF;
 
         if ($type == 'blackcard') {
             $sql = <<<EOF
-            UPDATE crm_helpers SET helper_alias = :helper_alias
+            UPDATE crm_helpers SET helper_alias = :helper_alias, helper_id = :helper_id
             WHERE crm_id = :crm_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
                 ':helper_alias' => $alias,
+                ':helper_id' => $helperId,
                 ':crm_id' => $ownerId,
                 ':user_id' => $userId,
             ]);
