@@ -67,12 +67,12 @@ EOF;
     }
 
 /**
-     * Get owners of ministore.
-     *
-     * @param int $userId
-     * @param string $type
-     * @return array
-     */
+ * Get owners of ministore.
+ *
+ * @param int $userId
+ * @param string $type
+ * @return array
+ */
     public function getOwners($userId, $type)
     {
         if ($type == 'website') {
@@ -122,7 +122,7 @@ EOF;
             WHERE site_id = :site_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
-            $query->execute([
+            $success = $query->execute([
                 ':helper_alias' => $alias,
                 ':helper_id' => $helperId,
                 ':site_id' => $ownerId,
@@ -136,7 +136,7 @@ EOF;
             WHERE crm_id = :crm_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
-            $query->execute([
+            $success = $query->execute([
                 ':helper_alias' => $alias,
                 ':helper_id' => $helperId,
                 ':crm_id' => $ownerId,
@@ -144,7 +144,7 @@ EOF;
             ]);
         }
 
-        if ($query->rowCount() > 0) {
+        if ($success) {
             return true;
         }
         return false;
