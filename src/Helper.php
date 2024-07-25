@@ -208,12 +208,11 @@ EOF;
     {
         if ($type == 'website') {
             $sql = <<<EOF
-            UPDATE user_sites SET deleted_at = :now
+            UPDATE user_sites SET deleted_at = NOW()
             WHERE site_id = :site_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
-                ':now' => date('Y-m-d H:i:s'),
                 ':site_id' => $ownerId,
                 ':user_id' => $userId,
             ]);
@@ -221,12 +220,11 @@ EOF;
 
         if ($type == 'blackcard') {
             $sql = <<<EOF
-            UPDATE crm_helpers SET deleted_at = :now
+            UPDATE crm_helpers SET deleted_at = NOW()
             WHERE crm_id = :crm_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
-                ':now' => date('Y-m-d H:i:s'),
                 ':crm_id' => $ownerId,
                 ':user_id' => $userId,
             ]);
