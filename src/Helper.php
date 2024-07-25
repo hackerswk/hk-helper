@@ -40,7 +40,7 @@ class Helper
         if ($type == 'website') {
             $sql = <<<EOF
             SELECT * FROM user_sites
-            WHERE site_id = :site_id
+            WHERE site_id = :site_id AND deleted_at IS NULL
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
@@ -51,7 +51,7 @@ EOF;
         if ($type == 'blackcard') {
             $sql = <<<EOF
             SELECT * FROM crm_helpers
-            WHERE crm_id = :crm_id
+            WHERE crm_id = :crm_id AND deleted_at IS NULL
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
@@ -78,7 +78,7 @@ EOF;
         if ($type == 'website') {
             $sql = <<<EOF
             SELECT site_id, user_id, helper_id, helper_alias FROM user_sites
-            WHERE user_id = :user_id
+            WHERE user_id = :user_id AND deleted_at IS NULL
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
@@ -89,7 +89,7 @@ EOF;
         if ($type == 'blackcard') {
             $sql = <<<EOF
             SELECT crm_id, user_id, helper_id, helper_alias FROM crm_helpers
-            WHERE user_id = :user_id
+            WHERE user_id = :user_id AND deleted_at IS NULL
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
@@ -208,7 +208,7 @@ EOF;
     {
         if ($type == 'website') {
             $sql = <<<EOF
-            DELETE FROM user_sites
+            UPDATE user_sites SET deleted_at = :now
             WHERE site_id = :site_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
@@ -220,11 +220,12 @@ EOF;
 
         if ($type == 'blackcard') {
             $sql = <<<EOF
-            DELETE FROM crm_helpers
+            UPDATE crm_helpers SET deleted_at = :now
             WHERE crm_id = :crm_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
+                ':now' => date('Y-m-d H:i:s'),
                 ':crm_id' => $ownerId,
                 ':user_id' => $userId,
             ]);
