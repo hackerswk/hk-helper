@@ -213,6 +213,7 @@ EOF;
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
+                ':now' => date('Y-m-d H:i:s'),
                 ':site_id' => $ownerId,
                 ':user_id' => $userId,
             ]);
