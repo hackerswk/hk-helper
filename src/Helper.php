@@ -114,12 +114,12 @@ EOF;
      * @param string $alias
      * @return bool
      */
-    public function updateHelper($type, $ownerId, $userId, $helperId, $alias)
+    public function updateHelper($type, $ownerId, $userId, $helperId, $alias, $updated_by)
     {
         if ($type == 'website') {
             $sql = <<<EOF
             UPDATE user_sites SET helper_alias = :helper_alias, helper_id = :helper_id
-            WHERE site_id = :site_id AND user_id = :user_id
+            WHERE site_id = :site_id AND user_id = :user_id AND updated_by = :updated_by
 EOF;
             $query = $this->database->prepare($sql);
             $success = $query->execute([
@@ -127,13 +127,14 @@ EOF;
                 ':helper_id' => $helperId,
                 ':site_id' => $ownerId,
                 ':user_id' => $userId,
+                ':updated_by' => $updated_by,
             ]);
         }
 
         if ($type == 'blackcard') {
             $sql = <<<EOF
             UPDATE crm_helpers SET helper_alias = :helper_alias, helper_id = :helper_id
-            WHERE crm_id = :crm_id AND user_id = :user_id
+            WHERE crm_id = :crm_id AND user_id = :user_id AND updated_by = :updated_by
 EOF;
             $query = $this->database->prepare($sql);
             $success = $query->execute([
@@ -141,6 +142,7 @@ EOF;
                 ':helper_id' => $helperId,
                 ':crm_id' => $ownerId,
                 ':user_id' => $userId,
+                ':updated_by' => $updated_by,
             ]);
         }
 
@@ -160,12 +162,12 @@ EOF;
      * @param string $alias
      * @return bool
      */
-    public function link($type, $ownerId, $userId, $helperId, $alias)
+    public function link($type, $ownerId, $userId, $helperId, $alias, $created_by)
     {
         if ($type == 'website') {
             $sql = <<<EOF
             INSERT INTO user_sites
-            SET site_id = :site_id, user_id = :user_id, helper_id = :helper_id, helper_alias = :helper_alias
+            SET site_id = :site_id, user_id = :user_id, helper_id = :helper_id, helper_alias = :helper_alias, created_by = :created_by
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
@@ -173,13 +175,14 @@ EOF;
                 ':user_id' => $userId,
                 ':helper_id' => $helperId,
                 ':helper_alias' => $alias,
+                ':created_by' => $created_by,
             ]);
         }
 
         if ($type == 'blackcard') {
             $sql = <<<EOF
             INSERT INTO crm_helpers
-            SET crm_id = :crm_id, user_id = :user_id, helper_id = :helper_id, helper_alias = :helper_alias
+            SET crm_id = :crm_id, user_id = :user_id, helper_id = :helper_id, helper_alias = :helper_alias, created_by = :created_by
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
@@ -187,6 +190,7 @@ EOF;
                 ':user_id' => $userId,
                 ':helper_id' => $helperId,
                 ':helper_alias' => $alias,
+                ':created_by' => $created_by,
             ]);
         }
 
@@ -204,29 +208,31 @@ EOF;
      * @param int $userId
      * @return bool
      */
-    public function unlink($type, $ownerId, $userId)
+    public function unlink($type, $ownerId, $userId, $updated_by)
     {
         if ($type == 'website') {
             $sql = <<<EOF
             UPDATE user_sites SET deleted_at = NOW()
-            WHERE site_id = :site_id AND user_id = :user_id
+            WHERE site_id = :site_id AND user_id = :user_id AND updated_by = :updated_by
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
                 ':site_id' => $ownerId,
                 ':user_id' => $userId,
+                ':updated_by' => $updated_by,
             ]);
         }
 
         if ($type == 'blackcard') {
             $sql = <<<EOF
             UPDATE crm_helpers SET deleted_at = NOW()
-            WHERE crm_id = :crm_id AND user_id = :user_id
+            WHERE crm_id = :crm_id AND user_id = :user_id AND updated_by = :updated_by
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
                 ':crm_id' => $ownerId,
                 ':user_id' => $userId,
+                ':updated_by' => $updated_by,
             ]);
         }
 
