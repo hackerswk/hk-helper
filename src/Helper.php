@@ -118,8 +118,8 @@ EOF;
     {
         if ($type == 'website') {
             $sql = <<<EOF
-            UPDATE user_sites SET helper_alias = :helper_alias, helper_id = :helper_id
-            WHERE site_id = :site_id AND user_id = :user_id AND updated_by = :updated_by
+            UPDATE user_sites SET helper_alias = :helper_alias, helper_id = :helper_id, updated_by = :updated_by
+            WHERE site_id = :site_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $success = $query->execute([
@@ -133,8 +133,8 @@ EOF;
 
         if ($type == 'blackcard') {
             $sql = <<<EOF
-            UPDATE crm_helpers SET helper_alias = :helper_alias, helper_id = :helper_id
-            WHERE crm_id = :crm_id AND user_id = :user_id AND updated_by = :updated_by
+            UPDATE crm_helpers SET helper_alias = :helper_alias, helper_id = :helper_id, updated_by = :updated_by
+            WHERE crm_id = :crm_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $success = $query->execute([
@@ -212,8 +212,8 @@ EOF;
     {
         if ($type == 'website') {
             $sql = <<<EOF
-            UPDATE user_sites SET deleted_at = NOW()
-            WHERE site_id = :site_id AND user_id = :user_id AND updated_by = :updated_by
+            UPDATE user_sites SET deleted_at = NOW(), updated_by = :updated_by
+            WHERE site_id = :site_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
@@ -225,8 +225,8 @@ EOF;
 
         if ($type == 'blackcard') {
             $sql = <<<EOF
-            UPDATE crm_helpers SET deleted_at = NOW()
-            WHERE crm_id = :crm_id AND user_id = :user_id AND updated_by = :updated_by
+            UPDATE crm_helpers SET deleted_at = NOW(), updated_by = :updated_by
+            WHERE crm_id = :crm_id AND user_id = :user_id
 EOF;
             $query = $this->database->prepare($sql);
             $query->execute([
